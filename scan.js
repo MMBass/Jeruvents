@@ -126,7 +126,7 @@ async function dbReadAll() {
 }
 
 async function dbUpdate(events) {
-    fs.writeFileSync('events.json', JSON.stringify(events));
+    // fs.writeFileSync('events.json', JSON.stringify(events));
     await client.connect();
     const options = { ordered: false, forceServerObjectId: true };
 
