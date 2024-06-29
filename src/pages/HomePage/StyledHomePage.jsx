@@ -42,7 +42,7 @@ const StyledHomePage = styled(HomePage)`
       @media (max-width: 600px) {
         margin-bottom: 0px;
         letter-spacing: -3px;
-        font-size: 53px;
+        font-size: 57px;
       }
     }
     .h1-3{
