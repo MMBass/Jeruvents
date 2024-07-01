@@ -22,7 +22,13 @@ app.get('/events', async (req, res) => {
 });
 
 app.get('/scan', async (req, res) => {
-    scanService();
+    try{
+        await scanService();
+        let results = await dbReadAll();
+        res.send(results);
+    } catch {
+        res.sendStatus(500);
+    }
 });
 
 async function dbReadAll() {
