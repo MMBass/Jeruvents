@@ -138,7 +138,7 @@ async function dbUpdate(events) {
 }
 
 async function loopScan() {
-
+    console.error("start loopScan");
     let events = [];
 
     for (const page of pagesList) {

@@ -24,7 +24,7 @@ app.get('/events', async (req, res) => {
 
 app.get('/scan', async (req, res) => {
     res.send('Scan start');
-    await scanService();
+    scanService();
     console.log('Scan completed');
 });
 
