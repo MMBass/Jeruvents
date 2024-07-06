@@ -77,9 +77,7 @@ async function cheerioFetch(url, page_name) {
             }
 
             function pushItems(pageItems) {
-                console.error("item push");
                 if (pageItems && pageItems.edges) {
-                    console.error("item push 2");
                     pageItems.edges.forEach(event => {
                         event = event.node;
             
@@ -94,7 +92,7 @@ async function cheerioFetch(url, page_name) {
                         currEvents.push(
                             {
                                 id: event.id,
-                                title: event.node.name,
+                                title: event.node.name + " 01",
                                 by: event.node.event_creator.name,
                                 date: event.node.day_time_sentence,
                                 location: event.node.event_place.contextual_name,
@@ -113,7 +111,7 @@ async function cheerioFetch(url, page_name) {
                     // }); // create hash id for each event, to compare in future
 
                 } else {
-                    console.error("No upcoming events found.");
+                    console.log("No upcoming events found.");
                 }
             }
         });
@@ -138,7 +136,7 @@ async function dbUpdate(events) {
 }
 
 async function loopScan() {
-    console.error("start loopScan");
+
     let events = [];
 
     for (const page of pagesList) {
@@ -147,14 +145,12 @@ async function loopScan() {
             if (page_events[0]) events = events.concat(page_events);
         } catch (e) {
             // todo catch err
-            console.error(e);
+            console.log(e);
             continue;
         }
     }
 
-    console.error("Total events: " + events.length);
     if (events.length > 3) { // Only if enough data - (cause we gonna empty the db);
-        console.error("Total events: " + events.length);
         events = shortSortByDate(events);
         dbUpdate(events);
     }
