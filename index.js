@@ -26,15 +26,12 @@ app.get('/scan', async (req, res) => {
     res.send('Scan start');
     await scanService();
     console.log('Scan completed');
-    let results = await dbReadAll();
-    console.log(results);
 });
 
 async function dbReadAll() {
     await client.connect();
     let all = await collection.find().sort({ _id: 1 }).toArray();
     client.close();
-    console.log(all);
     return all;
 }
 

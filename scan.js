@@ -51,7 +51,7 @@ async function cheerioFetch(url, page_name) {
             });
 
             if (!scriptWithPageItems?.length) {
-                console.error("Script element not found for page: " + page_name);
+                console.info("Script element not found for page: " + page_name);
             } else {
                 const jsonString = scriptWithPageItems;
                 try {
@@ -77,7 +77,9 @@ async function cheerioFetch(url, page_name) {
             }
 
             function pushItems(pageItems) {
+                console.log("item push");
                 if (pageItems && pageItems.edges) {
+                    console.log("item push 2");
                     pageItems.edges.forEach(event => {
                         event = event.node;
             
@@ -138,7 +140,7 @@ async function dbUpdate(events) {
 async function loopScan() {
 
     let events = [];
-    console.log(pagesList);
+
     for (const page of pagesList) {
         try {
             let page_events = await cheerioFetch(page.page_url, page.name);
@@ -148,10 +150,11 @@ async function loopScan() {
             console.log(e);
             continue;
         }
-    }      
-      console.log(events.length);
+    }
 
+    console.log("Total events: " + events.length);
     if (events.length > 3) { // Only if enough data - (cause we gonna empty the db);
+        console.log("Total events: " + events.length);
         events = shortSortByDate(events);
         dbUpdate(events);
     }
