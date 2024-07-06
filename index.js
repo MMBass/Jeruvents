@@ -23,16 +23,11 @@ app.get('/events', async (req, res) => {
 });
 
 app.get('/scan', async (req, res) => {
-    try{
-        console.log('Scan start');
-        await scanService();
-        console.log('Scan completed');
-        let results = await dbReadAll();
-        console.log('All events from db:');
-        res.send(results);
-    } catch {
-        res.sendStatus(500);
-    }
+    res.send('Scan start');
+    await scanService();
+    console.log('Scan completed');
+    let results = await dbReadAll();
+    console.log(results);
 });
 
 async function dbReadAll() {
