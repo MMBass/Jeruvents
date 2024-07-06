@@ -140,6 +140,7 @@ async function loopScan() {
     let events = [];
 
     for (const page of pagesList) {
+        console.log("Scanning page: " + page.name);
         try {
             let page_events = await cheerioFetch(page.page_url, page.name);
             if (page_events[0]) events = events.concat(page_events);
