@@ -126,7 +126,6 @@ async function dbReadAll() {
 }
 
 async function dbUpdate(events) {
-    console.log("Updating DB with " + events.length + " events");
     // fs.writeFileSync('events.json', JSON.stringify(events));
     await client.connect();
     const options = { ordered: false, forceServerObjectId: true };
@@ -140,32 +139,22 @@ async function loopScan() {
 
     let events = [];
 
-    // for (const page of pagesList) {
-    //     console.log("Scanning page: " + page.name);
-    //     try {
-    //         let page_events = await cheerioFetch(page.page_url, page.name);
-    //         if (page_events[0]) events = events.concat(page_events);
-    //     } catch (e) {
-    //         // todo catch err
-    //         console.log(e);
-    //         continue;
-    //     }
-    // }
+    for (const page of pagesList) {
+        console.log("Scanning page: " + page.name);
+        try {
+            let page_events = await cheerioFetch(page.page_url, page.name);
+            if (page_events[0]) events = events.concat(page_events);
+        } catch (e) {
+            // todo catch err
+            console.log(e);
+            continue;
+        }
+    }
 
-    // if (events.length > 3) { // Only if enough data - (cause we gonna empty the db);
-        // events = shortSortByDate(events);
-        dbUpdate(     [
-            {
-                id: 'event.id',
-                title: 'event.node.name',
-                by: 'event.node.event_creator.name',
-                date: 'event.node.day_time_sentence',
-                location: 'event.node.event_place.contextual_name',
-                link: 'event.url',
-                img: 'event.image.uri',
-            }
-        ] );
-    // }
+    if (events.length > 3) { // Only if enough data - (cause we gonna empty the db);
+        events = shortSortByDate(events);
+        dbUpdate(events);
+    }
 };
 
 function shortSortByDate(evs) {
