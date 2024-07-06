@@ -77,9 +77,9 @@ async function cheerioFetch(url, page_name) {
             }
 
             function pushItems(pageItems) {
-                console.log("item push");
+                console.error("item push");
                 if (pageItems && pageItems.edges) {
-                    console.log("item push 2");
+                    console.error("item push 2");
                     pageItems.edges.forEach(event => {
                         event = event.node;
             
@@ -113,7 +113,7 @@ async function cheerioFetch(url, page_name) {
                     // }); // create hash id for each event, to compare in future
 
                 } else {
-                    console.log("No upcoming events found.");
+                    console.error("No upcoming events found.");
                 }
             }
         });
@@ -147,14 +147,14 @@ async function loopScan() {
             if (page_events[0]) events = events.concat(page_events);
         } catch (e) {
             // todo catch err
-            console.log(e);
+            console.error(e);
             continue;
         }
     }
 
-    console.log("Total events: " + events.length);
+    console.error("Total events: " + events.length);
     if (events.length > 3) { // Only if enough data - (cause we gonna empty the db);
-        console.log("Total events: " + events.length);
+        console.error("Total events: " + events.length);
         events = shortSortByDate(events);
         dbUpdate(events);
     }
