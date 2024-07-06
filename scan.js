@@ -138,7 +138,7 @@ async function dbUpdate(events) {
 async function loopScan() {
 
     let events = [];
-
+    console.log(pagesList);
     for (const page of pagesList) {
         try {
             let page_events = await cheerioFetch(page.page_url, page.name);
@@ -148,7 +148,8 @@ async function loopScan() {
             console.log(e);
             continue;
         }
-    }
+    }      
+      console.log(events.length);
 
     if (events.length > 3) { // Only if enough data - (cause we gonna empty the db);
         events = shortSortByDate(events);

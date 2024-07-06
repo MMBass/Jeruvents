@@ -1,5 +1,6 @@
-const express = require('express')
-const cors = require('cors')
+const express = require('express');
+require('express-async-errors');
+const cors = require('cors');
 const app = express();
 const helmet = require('helmet');
 
@@ -23,8 +24,11 @@ app.get('/events', async (req, res) => {
 
 app.get('/scan', async (req, res) => {
     try{
+        console.log('Scan start');
         await scanService();
+        console.log('Scan completed');
         let results = await dbReadAll();
+        console.log('All events from db:');
         res.send(results);
     } catch {
         res.sendStatus(500);
