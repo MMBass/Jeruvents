@@ -92,7 +92,7 @@ async function cheerioFetch(url, page_name) {
                         currEvents.push(
                             {
                                 id: event.id,
-                                title: event.node.name + " 01",
+                                title: event.node.name + " 01 ",
                                 by: event.node.event_creator.name,
                                 date: event.node.day_time_sentence,
                                 location: event.node.event_place.contextual_name,
