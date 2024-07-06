@@ -78,29 +78,29 @@ async function cheerioFetch(url, page_name) {
 
             function pushItems(pageItems) {
                 if (pageItems && pageItems.edges) {
-                    pageItems.edges.forEach(event => {
-                        event = event.node;
+                    pageItems.edges.forEach(jeruEvent => {
+                        jeruEvent = jeruEvent.node
             
-                        if (event.node.day_time_sentence.includes('MORE')) {
+                        if (jeruEvent.node.day_time_sentence.includes('MORE')) {
                             // Skip repeated events, they are anyway once already in the page
-                            return;
+                            return
                         }
-                        if(!event.node.event_place.location.reverse_geocode.city.includes('ירושלים')){
-                            return;
+                        if(!jeruEvent.node.event_place.location.reverse_geocode.city.includes('ירושלים')){
+                            return
                         }
 
                         currEvents.push(
                             {
-                                id: event.id,
-                                title: event.node.name + " 01 ",
-                                by: event.node.event_creator.name,
-                                date: event.node.day_time_sentence,
-                                location: event.node.event_place.contextual_name,
-                                link: event.url,
-                                img: event.image.uri,
+                                id: jeruEvent.id,
+                                title: jeruEvent.node.name + " 01 ",
+                                by: jeruEvent.node.event_creator.name,
+                                date: jeruEvent.node.day_time_sentence,
+                                location: jeruEvent.node.event_place.contextual_name,
+                                link: jeruEvent.url,
+                                img: jeruEvent.image.uri,
                             }
-                        );
-                    });
+                        )
+                    })
 
                     Array.from(new Set(currEvents.map(obj =>
                         JSON.stringify(obj)))).map(str => JSON.parse(str)); // Remove duplicates
@@ -126,6 +126,7 @@ async function dbReadAll() {
 }
 
 async function dbUpdate(events) {
+    console.log("Updating DB with " + events.length + " events");
     // fs.writeFileSync('events.json', JSON.stringify(events));
     await client.connect();
     const options = { ordered: false, forceServerObjectId: true };
@@ -139,22 +140,32 @@ async function loopScan() {
 
     let events = [];
 
-    for (const page of pagesList) {
-        console.log("Scanning page: " + page.name);
-        try {
-            let page_events = await cheerioFetch(page.page_url, page.name);
-            if (page_events[0]) events = events.concat(page_events);
-        } catch (e) {
-            // todo catch err
-            console.log(e);
-            continue;
-        }
-    }
+    // for (const page of pagesList) {
+    //     console.log("Scanning page: " + page.name);
+    //     try {
+    //         let page_events = await cheerioFetch(page.page_url, page.name);
+    //         if (page_events[0]) events = events.concat(page_events);
+    //     } catch (e) {
+    //         // todo catch err
+    //         console.log(e);
+    //         continue;
+    //     }
+    // }
 
-    if (events.length > 3) { // Only if enough data - (cause we gonna empty the db);
-        events = shortSortByDate(events);
-        dbUpdate(events);
-    }
+    // if (events.length > 3) { // Only if enough data - (cause we gonna empty the db);
+        // events = shortSortByDate(events);
+        dbUpdate(     [
+            {
+                id: 'event.id',
+                title: 'event.node.name',
+                by: 'event.node.event_creator.name',
+                date: 'event.node.day_time_sentence',
+                location: 'event.node.event_place.contextual_name',
+                link: 'event.url',
+                img: 'event.image.uri',
+            }
+        ] );
+    // }
 };
 
 function shortSortByDate(evs) {
