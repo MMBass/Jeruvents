@@ -1,6 +1,6 @@
 const sha1 = require('sha1');
 const cheerio = require('cheerio');
-const fs = require('fs');
+// const fs = require('fs');
 
 const dev_config = (process.env.vercel === undefined) ? require('./devConfig') : undefined;
 const MongoClient = require('mongodb').MongoClient;
@@ -140,7 +140,6 @@ async function loopScan() {
     let events = [];
 
     for (const page of pagesList) {
-        console.log("Scanning page: " + page.name);
         try {
             let page_events = await cheerioFetch(page.page_url, page.name);
             if (page_events[0]) events = events.concat(page_events);
@@ -151,8 +150,46 @@ async function loopScan() {
         }
     }
 
+    events =   [
+        {
+            id: 'event.id',
+            title: 'event.node.name',
+            by: 'event.node.event_creator.name',
+            date: 'event.node.day_time_sentence',
+            location: 'event.node.event_place.contextual_name',
+            link: 'event.url',
+            img: 'event.image.uri',
+        },
+        {
+            id: 'event.id',
+            title: 'event.node.name',
+            by: 'event.node.event_creator.name',
+            date: 'event.node.day_time_sentence',
+            location: 'event.node.event_place.contextual_name',
+            link: 'event.url',
+            img: 'event.image.uri',
+        },
+        {
+            id: 'event.id',
+            title: 'event.node.name',
+            by: 'event.node.event_creator.name',
+            date: 'event.node.day_time_sentence',
+            location: 'event.node.event_place.contextual_name',
+            link: 'event.url',
+            img: 'event.image.uri',
+        },
+        {
+            id: 'event.id',
+            title: 'event.node.name',
+            by: 'event.node.event_creator.name',
+            date: 'event.node.day_time_sentence',
+            location: 'event.node.event_place.contextual_name',
+            link: 'event.url',
+            img: 'event.image.uri',
+        }
+    ]
     if (events.length > 3) { // Only if enough data - (cause we gonna empty the db);
-        events = shortSortByDate(events);
+        // events = shortSortByDate(events);
         dbUpdate(events);
     }
 };
