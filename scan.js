@@ -181,6 +181,6 @@ async function main() {
 
 }
 // main();
-// loopScan();
+loopScan();
 
 module.exports = loopScan;

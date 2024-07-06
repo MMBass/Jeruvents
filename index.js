@@ -63,7 +63,7 @@ async function cheerioFetch(url, page_name) {
         'Upgrade-Insecure-Requests': '1',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
     }
-    
+
     await fetch(url, { headers })
         .then(res => res.text())
         .then(htmlResponse => {
@@ -110,12 +110,12 @@ async function cheerioFetch(url, page_name) {
                 if (pageItems && pageItems.edges) {
                     pageItems.edges.forEach(jeruEvent => {
                         jeruEvent = jeruEvent.node
-            
+
                         if (jeruEvent.node.day_time_sentence.includes('MORE')) {
                             // Skip repeated events, they are anyway once already in the page
                             return
                         }
-                        if(!jeruEvent.node.event_place.location.reverse_geocode.city.includes('ירושלים')){
+                        if (!jeruEvent.node.event_place.location.reverse_geocode.city.includes('ירושלים')) {
                             return
                         }
 
@@ -159,25 +159,29 @@ async function dbUpdate(events) {
 }
 
 async function loopScan() {
+    try {
+        let events = [];
+        console.log(pagesList);
 
-    let events = [];
-    console.log(pagesList);
-    for (const page of pagesList) {
-        try {
-            let page_events = await cheerioFetch(page.page_url, page.name);
-            if (page_events[0]) events = events.concat(page_events);
-        } catch (e) {
-            // todo catch err
-            console.log(e);
-            continue;
+        for (const page of pagesList) {
+            try {
+                let page_events = await cheerioFetch(page.page_url, page.name);
+                if (page_events[0]) {
+                    events = events.concat(page_events);
+                }
+            } catch (error) {
+                console.error(`Error fetching events for page '${page.name}':`, error);
+            }
         }
-    }
 
-    if (events.length > 3) { // Only if enough data - (cause we gonna empty the db);
-        events = shortSortByDate(events);
-        dbUpdate(events);
+        if (events.length > 3) {
+            events = shortSortByDate(events);
+            await dbUpdate(events);
+        }
+    } catch (error) {
+        console.error('Error during loopScan:', error);
     }
-};
+}
 
 function shortSortByDate(evs) {
     // TODO in future detect also Year, if it's reffer for next JAN for example
