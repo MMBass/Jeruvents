@@ -23,6 +23,7 @@ app.get('/events', async (req, res) => {
 });
 
 app.get('/scan', async (req, res) => {
+    console.log('Scan start');
     res.send('Scan start');
     scanService();
     console.log('Scan completed');
