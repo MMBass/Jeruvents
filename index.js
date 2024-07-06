@@ -1,5 +1,5 @@
 const express = require('express');
-require('express-async-errors');
+// require('express-async-errors');
 const cors = require('cors');
 const app = express();
 const helmet = require('helmet');
