@@ -139,57 +139,19 @@ async function loopScan() {
 
     let events = [];
 
-    // for (const page of pagesList) {
-    //     try {
-    //         let page_events = await cheerioFetch(page.page_url, page.name);
-    //         if (page_events[0]) events = events.concat(page_events);
-    //     } catch (e) {
-    //         // todo catch err
-    //         console.log(e);
-    //         continue;
-    //     }
-    // }
-
-    events =   [
-        {
-            id: 'event.id',
-            title: 'event.node.name',
-            by: 'event.node.event_creator.name',
-            date: 'event.node.day_time_sentence',
-            location: 'event.node.event_place.contextual_name',
-            link: 'event.url',
-            img: 'event.image.uri',
-        },
-        {
-            id: 'event.id',
-            title: 'event.node.name',
-            by: 'event.node.event_creator.name',
-            date: 'event.node.day_time_sentence',
-            location: 'event.node.event_place.contextual_name',
-            link: 'event.url',
-            img: 'event.image.uri',
-        },
-        {
-            id: 'event.id',
-            title: 'event.node.name',
-            by: 'event.node.event_creator.name',
-            date: 'event.node.day_time_sentence',
-            location: 'event.node.event_place.contextual_name',
-            link: 'event.url',
-            img: 'event.image.uri',
-        },
-        {
-            id: 'event.id',
-            title: 'event.node.name',
-            by: 'event.node.event_creator.name',
-            date: 'event.node.day_time_sentence',
-            location: 'event.node.event_place.contextual_name',
-            link: 'event.url',
-            img: 'event.image.uri',
+    for (const page of pagesList) {
+        try {
+            let page_events = await cheerioFetch(page.page_url, page.name);
+            if (page_events[0]) events = events.concat(page_events);
+        } catch (e) {
+            // todo catch err
+            console.log(e);
+            continue;
         }
-    ]
+    }
+
     if (events.length > 3) { // Only if enough data - (cause we gonna empty the db);
-        // events = shortSortByDate(events);
+        events = shortSortByDate(events);
         dbUpdate(events);
     }
 };
