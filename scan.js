@@ -139,16 +139,16 @@ async function loopScan() {
 
     let events = [];
 
-    for (const page of pagesList) {
-        try {
-            let page_events = await cheerioFetch(page.page_url, page.name);
-            if (page_events[0]) events = events.concat(page_events);
-        } catch (e) {
-            // todo catch err
-            console.log(e);
-            continue;
-        }
-    }
+    // for (const page of pagesList) {
+    //     try {
+    //         let page_events = await cheerioFetch(page.page_url, page.name);
+    //         if (page_events[0]) events = events.concat(page_events);
+    //     } catch (e) {
+    //         // todo catch err
+    //         console.log(e);
+    //         continue;
+    //     }
+    // }
 
     events =   [
         {
