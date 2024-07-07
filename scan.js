@@ -161,7 +161,7 @@ function shortSortByDate(evs) {
     // detect if the month is DEC and ther's an events are from next JAN?
     const happeningNowEvents = evs.filter(ev => ev.date.includes('HAPPENING NOW') || ev.date.includes('TODAY'));
     const tomorrowEvents = evs.filter(ev => ev.date.includes('TOMORROW'));
-    const otherEvents = evs.filter(ev => !ev.date.includes('HAPPENING NOW') && !ev.date.includes('TODAY') && !ev.date.includes('TOMORROW'));
+    const otherEvents = evs.filter(ev => !ev.date.includes('HAPPENING NOW') && !ev.date.includes('TODAY') && !ev.date.includes('TOMORROW') && !ev.date.includes('-')); // For now hide also the continual events by '-' sign (Format: TUE, JUL 16 - JUL 23)
 
     otherEvents.sort((a, b) => {
         const dateA = a.date.split(', ')[1].split(' AT ')[0].trim();
@@ -169,7 +169,8 @@ function shortSortByDate(evs) {
         return new Date(dateB) - new Date(dateA);
     });
     otherEvents.reverse();
-    const sortedEvents = [...happeningNowEvents, ...tomorrowEvents, ...otherEvents];
+    // const sortedEvents = [...happeningNowEvents, ...tomorrowEvents, ...otherEvents];
+    const sortedEvents = [ ...otherEvents];
 
     return sortedEvents;
 }
@@ -181,6 +182,6 @@ async function main() {
 
 }
 // main();
-loopScan();
+// loopScan();
 
 module.exports = loopScan;
