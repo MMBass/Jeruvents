@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Typography } from "@mui/material";
 import Box from '@mui/material/Box';
@@ -16,12 +16,10 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 import LaunchIcon from '@mui/icons-material/Launch';
 
 function HomePage({ className }) {
-  const [events, setEvents] = useState([]);
-  const [visibleEvents, setVisibleEvents] = useState([]);
+  const [visibleEvents, setVisibleEvents] = useState( localStorage.getItem('visibleEvents') ? JSON.parse(localStorage.getItem('visibleEvents')) : []);
 
   const serverUri = 'https://eventim-backend.vercel.app';
   // const serverUri = 'http://localhost:5000';
-
 
   const jerusIcon = 'https://i.etsystatic.com/5559581/r/il/6d56de/1543598097/il_570xN.1543598097_sevf.jpg';
 
@@ -54,17 +52,17 @@ function HomePage({ className }) {
     const mergedFilters = [...existingFilters, ...locationFilters.filter(filter => !existingFilters.some(existingFilter => existingFilter.name === filter.name))];
 
     localStorage.setItem('locationFilters', JSON.stringify(mergedFilters));
-    filterVisibles(data)
+    filterVisibles(data);
   }
 
-  function filterVisibles(data) {
+  function filterVisibles(eventsData) {
     const locationFilters = JSON.parse(localStorage.getItem('locationFilters')) || [];
-    const visibleEvents = data.filter(ev => {
-      const eventLocation = ev.location;
-      const isHidden = locationFilters.some(filter => filter.name === eventLocation && filter.hide);
-      return !isHidden;
+    const visibleEvents = eventsData.filter(event => {
+      const locationFilter = locationFilters.find(filter => filter.name === event.location);
+      return locationFilter && !locationFilter.hide;
     });
-    setVisibleEvents(removeDuplicates(visibleEvents));
+    // setVisibleEvents(removeDuplicates(visibleEvents)); //Filters Not working yet
+    setVisibleEvents(removeDuplicates(eventsData));
   }
 
   function removeDuplicates(events) {
@@ -78,7 +76,7 @@ function HomePage({ className }) {
         eventKeys.add(eventKey);
       }
     }
-
+    localStorage.setItem('visibleEvents', JSON.stringify(uniqueEvents));
     return uniqueEvents;
   }
 
@@ -137,6 +135,7 @@ function HomePage({ className }) {
                       <CardMedia
                         component="img"
                         sx={{ width: "40%" }}
+                        loading='lazy'
 
                         image={ev.img || jerusIcon}
                         alt="event image"
