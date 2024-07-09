@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import LaunchIcon from '@mui/icons-material/Launch';
 
 import constants from '@/constants';
-import T from './EventCardI18N';
+import T from './EventCardI18n.js';
 
 const EventCard = ({className, ev }) => {
   return (

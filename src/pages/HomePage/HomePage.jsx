@@ -6,12 +6,10 @@ import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import LinearProgress from '@mui/material/LinearProgress';
 
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-
-// import EventCard from '@components/EventCard/EventCard';
+import HomeTop from '@components/HomeTop/HomeTop';
 
 import constants from '@/constants';
-import T from './HomePageI18N.js';
+import T from './HomePageI18n';
 
 const EventCard = lazy(() => import('@components/EventCard/EventCard')); // Assuming a separate component for event details
 
@@ -31,7 +29,6 @@ function HomePage({ className }) {
       .then(response => response.json())
       .then(data => {
         if (data.length > 2) {
-
           createFilters(data);
         }
       }
@@ -80,18 +77,7 @@ function HomePage({ className }) {
   return (
     <Box className={className}>
       <div className='home-top-cover'>
-        <Grid container spacing={1}>
-          <Grid item xs={12} md={12} className='home-top-text'>
-            <Typography className='h1-1' component="h1" variant="h3" fontWeight={700}>JERUVENTS</Typography>
-            <Typography className='h1-2' component="h1" variant="h3" fontWeight={700}>אירועים</Typography>
-            <Typography className='h1-3' component="h1" variant="h3" color="#dfe2e7" fontWeight={700}>מהפייסבוק</Typography>
-            <Typography className='h1-4' component="h1" variant="h3" fontWeight={700}>בירושלים <KeyboardDoubleArrowDownIcon sx={{
-              fontSize: '65px',
-              color: '#dfe2e7'
-            }}></KeyboardDoubleArrowDownIcon></Typography>
-          </Grid>
-
-        </Grid>
+        <HomeTop />
       </div>
 
       <Suspense
