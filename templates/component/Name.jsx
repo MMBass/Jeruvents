@@ -1,5 +1,5 @@
 
-import T from "./NameI18n";
+import T from "./NameI18n.js";
 
 function Name({__class__CamelCase__}) {
   return (

@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 
 import constants from '@/constants';
-import T from "./HomeTopI18n";
+import T from "./HomeTopI18n.js";
 
 function HomeTop({ className }) {
   return (
