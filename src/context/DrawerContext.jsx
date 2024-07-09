@@ -6,7 +6,6 @@ export default function DrawerContextProvider(props) {
     const [drawer, setDrawer] = useState({});
 
     const toggleDrawer = (open, anchor, permanent = "temporary", child) => {
-        console.log(child);
         setDrawer({ open, anchor, permanent, child });
     }
 

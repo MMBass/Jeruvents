@@ -1,9 +1,9 @@
 
-// shared layout for all pages
-function Layout({className,...props}) {
+// Shared layout for all pages
+function Layout({className, children}) {
   return (
     <div className={className}>
-      {props.children}
+      {children}
     </div>
   );
 }

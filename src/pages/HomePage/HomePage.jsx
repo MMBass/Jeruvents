@@ -1,30 +1,27 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import LinearProgress from '@mui/material/LinearProgress';
 
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-import LaunchIcon from '@mui/icons-material/Launch';
+
+// import EventCard from '@components/EventCard/EventCard';
+
+import constants from '@/constants';
+import T from './HomePageI18N.js';
+
+const EventCard = lazy(() => import('@components/EventCard/EventCard')); // Assuming a separate component for event details
 
 function HomePage({ className }) {
-  const [visibleEvents, setVisibleEvents] = useState( localStorage.getItem('visibleEvents') ? JSON.parse(localStorage.getItem('visibleEvents')) : []);
-
-  const serverUri = 'https://eventim-backend.vercel.app';
-  // const serverUri = 'http://localhost:5000';
-
-  const jerusIcon = 'https://i.etsystatic.com/5559581/r/il/6d56de/1543598097/il_570xN.1543598097_sevf.jpg';
+  const [visibleEvents, setVisibleEvents] = useState(
+    localStorage.getItem('visibleEvents') ? JSON.parse(localStorage.getItem('visibleEvents')) : []
+  );
 
   useEffect(() => {
-    fetch(`${serverUri}/events`, {
+    fetch(`${constants.prodServerUri}/events`, {
       method: 'get',
       headers: {
         'Accept': 'application/json',
@@ -97,68 +94,35 @@ function HomePage({ className }) {
         </Grid>
       </div>
 
-      {
-        visibleEvents[0] ?
-          <Box className={'events-box'} sx={{ flexGrow: 2, height: '100%' }}>
-            <Grid container spacing={1} sx={{ height: '100%' }}>
-              {visibleEvents.map((ev, i) => {
-                return (
-                  <Grid item xs={12} md={12} key={i}>
-                    {i === 0 &&
-                      <Divider textAlign="center" variant="middle" sx={{ color: "#3980f358" }}>
-                        <Typography padding={'20px'}>{ev.date.split(" AT ")[0]}</Typography>
-                      </Divider>
-                    }
+      <Suspense
+        fallback={<Box sx={{ height: '200px', width: '100%', textAlign: 'center', }}>
+          <LinearProgress sx={{ width: '60%', margin: 'auto', marginTop: '50px' }}></LinearProgress>
+        </Box>}
+      >
+        <Box className={'events-box'} sx={{ flexGrow: 2, height: '100%' }}>
+          <Grid container spacing={1} sx={{ height: '100%' }}>
+            {visibleEvents.map((ev, i) => {
+              return (
+                <Grid item xs={12} md={12} key={i}>
+                  {i === 0 &&
+                    <Divider textAlign="center" variant="middle" sx={{ color: "#3980f358" }}>
+                      <Typography padding={'20px'}>{ev.date.split(" AT ")[0]}</Typography>
+                    </Divider>
+                  }
 
-                    <Card dir={'rtl'} className='card-event' sx={{ display: 'flex', margin: "10px", padding: '20px', justifyContent: "space-between" }}>
-                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <CardContent sx={{ flex: '1 0 auto' }}>
-                          <Typography component="div" variant="h6" color="text.secondary" fontSize={'15px'} fontWeight={700}>
-                            {ev.title}
-                          </Typography>
-                          <Typography variant="subtitle1" color="text.secondary" component="div" fontSize={'11px'} paddingTop={"10px"} fontWeight={500}>
-                            {ev.date}
-                          </Typography>
-                          <Typography variant="subtitle2" color="text.secondary" component="div" fontSize={'11px'} paddingTop={"10px"} fontWeight={600}>
-                            {ev.by}
-                          </Typography>
-                          <Typography variant="subtitle2" color="text.secondary" component="div" fontSize={'11px'} paddingTop={"10px"} fontWeight={500}>
-                            מיקום: {ev.location}
-                          </Typography>
-                        </CardContent>
-                        {/* <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}> */}
-                        <CardActions>
-                          <Button size="small" fontSize={'12px'} href={ev.link} target="_blank" rel="noopener noreferrer" > <LaunchIcon /> <span>לדף האירוע</span></Button>
-                        </CardActions>
-                        {/* </Box> */}
-                      </Box>
-                      <CardMedia
-                        component="img"
-                        sx={{ width: "40%" }}
-                        loading='lazy'
+                  <EventCard ev={ev} />
 
-                        image={ev.img || jerusIcon}
-                        alt="event image"
-                        onError={(e) => { e.target.src = jerusIcon; }}
-                      />
-                    </Card>
-                    {visibleEvents[i + 1] && ev.date.split(" AT ")[0] !== visibleEvents[i + 1].date.split(" AT ")[0] && (
-                      <Divider textAlign="center" variant="middle" sx={{ color: "#3980f358" }}>
-                        <Typography padding={'20px'}>{visibleEvents[i + 1].date.split(" AT ")[0]}</Typography>
-                      </Divider>
-                    )}
-                  </Grid>
-                );
-              })}
-            </Grid>
-          </Box>
-
-          :
-
-          <Box sx={{ height: '200px', width: '100%', textAlign: 'center', }}>
-            <LinearProgress sx={{ width: '60%', margin: 'auto', marginTop: '50px' }}></LinearProgress>
-          </Box>
-      }
+                  {visibleEvents[i + 1] && ev.date.split(" AT ")[0] !== visibleEvents[i + 1].date.split(" AT ")[0] && (
+                    <Divider textAlign="center" variant="middle" sx={{ color: "#3980f358" }}>
+                      <Typography padding={'20px'}>{visibleEvents[i + 1].date.split(" AT ")[0]}</Typography>
+                    </Divider>
+                  )}
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Box>
+      </Suspense>
 
     </Box>
   );

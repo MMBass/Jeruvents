@@ -1,15 +1,14 @@
-import {
-  Grid,
-  Typography,
-  Divider
-} from '@mui/material';
+
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+
+import constants from '@/constants';
 
 function Footer({ className }) {
-  
-  const serverUri = 'https://eventim-backend.vercel.app';
-  // const serverUri = 'http://localhost:5000';
+
   const callScan = () => {
-    fetch(`${serverUri}/scan`)
+    fetch(`${constants.prodServerUri}/scan`)
   }
 
   return (
@@ -25,7 +24,7 @@ function Footer({ className }) {
             color={'#3980f38d'}
             padding={'20px'}
           >
-            JERUVENTS
+            {constants.appTitle.toUpperCase()}
           </Typography></Divider>
 
         </Grid>
