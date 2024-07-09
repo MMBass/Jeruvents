@@ -9,7 +9,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import HomeTop from '@components/HomeTop/HomeTop';
 
 import constants from '@/constants';
-import T from './HomePageI18n';
+import T from './HomePageI18n.js';
 
 const EventCard = lazy(() => import('@components/EventCard/EventCard')); // Assuming a separate component for event details
 
