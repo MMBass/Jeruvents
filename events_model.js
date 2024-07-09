@@ -19,3 +19,8 @@ async function dbUpdate(events) {
     await collection.insertMany(events, options);
     client.close();
 }
+
+module.exports = {
+    dbReadAll,
+    dbUpdate
+}
