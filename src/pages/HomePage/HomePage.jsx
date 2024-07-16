@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 
 import Typography from "@mui/material/Typography";
 import Box from '@mui/material/Box';
@@ -7,15 +7,13 @@ import Divider from '@mui/material/Divider';
 import LinearProgress from '@mui/material/LinearProgress';
 
 import HomeTop from '@components/HomeTop/HomeTop';
+import EventCard from '@components/EventCard/EventCard';
 
 import constants from '@/constants';
-// import T from './HomePageI18n';
-
-const EventCard = lazy(() => import('@components/EventCard/EventCard')); // Assuming a separate component for event details
 
 function HomePage({ className }) {
   const [visibleEvents, setVisibleEvents] = useState(
-    localStorage.getItem('visibleEvents') ? JSON.parse(localStorage.getItem('visibleEvents')) : []
+    localStorage.getItem('visibleEvents') ? JSON.parse(localStorage.getItem('visibleEvents')) : null
   );
 
   useEffect(() => {
@@ -80,14 +78,11 @@ function HomePage({ className }) {
         <HomeTop />
       </div>
 
-      <Suspense
-        fallback={<Box sx={{ height: '200px', width: '100%', textAlign: 'center', }}>
-          <LinearProgress sx={{ width: '60%', margin: 'auto', marginTop: '50px' }}></LinearProgress>
-        </Box>}
-      >
-        <Box className={'events-box'} sx={{ flexGrow: 2, height: '100%' }}>
+      <Box className={'events-box'} sx={{ flexGrow: 2, height: '100%' }}>
+        {visibleEvents ?
+
           <Grid container spacing={1} sx={{ height: '100%' }}>
-            {visibleEvents.map((ev, i) => {
+            {visibleEvents && visibleEvents.map((ev, i) => {
               return (
                 <Grid item xs={12} md={12} key={i}>
                   {i === 0 &&
@@ -107,9 +102,13 @@ function HomePage({ className }) {
               );
             })}
           </Grid>
-        </Box>
-      </Suspense>
+          :
+          <Box sx={{ height: '200px', width: '100%', textAlign: 'center', }}>
+            <LinearProgress sx={{ width: '60%', margin: 'auto', marginTop: '50px' }}></LinearProgress>
+          </Box>
+        }
 
+      </Box>
     </Box>
   );
 };
