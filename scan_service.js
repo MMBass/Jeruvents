@@ -157,6 +157,6 @@ function shortSortByDate(evs) {
     return sortedEvents;
 }
 
-loopScan();
+// loopScan();
 
 module.exports = loopScan;
