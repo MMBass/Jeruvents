@@ -13,7 +13,7 @@ import constants from '@/constants';
 
 function HomePage({ className }) {
   const [visibleEvents, setVisibleEvents] = useState(
-    localStorage.getItem('visibleEvents') ? JSON.parse(localStorage.getItem('visibleEvents')) : null
+    sessionStorage.getItem('visibleEvents') ? JSON.parse(sessionStorage.getItem('visibleEvents')) : null
   );
 
   useEffect(() => {
@@ -48,7 +48,7 @@ function HomePage({ className }) {
   }
 
   function filterVisibles(eventsData) {
-    const locationFilters = JSON.parse(localStorage.getItem('locationFilters')) || [];
+    const locationFilters = JSON.parse(sessionStorage.getItem('locationFilters')) || [];
     const visibleEvents = eventsData.filter(event => {
       const locationFilter = locationFilters.find(filter => filter.name === event.location);
       return locationFilter && !locationFilter.hide;
@@ -68,7 +68,7 @@ function HomePage({ className }) {
         eventKeys.add(eventKey);
       }
     }
-    localStorage.setItem('visibleEvents', JSON.stringify(uniqueEvents));
+    sessionStorage.setItem('visibleEvents', JSON.stringify(uniqueEvents));
     return uniqueEvents;
   }
 
